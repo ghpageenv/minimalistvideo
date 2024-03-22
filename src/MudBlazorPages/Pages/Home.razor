@@ -1,14 +1,20 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+@if (!string.IsNullOrWhiteSpace(YouTube))
+{
+    <center>
+        <iframe src="@($"https://www.youtube.com/embed/{YouTube}")"
+                width="560"
+                height="315"
+                title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
+        </iframe>
+    </center>
+}
 
+@code {
 
-<MudText Typo="Typo.h3" GutterBottom="true">Hello, world!</MudText>
-<MudText Class="mb-8">Welcome to your new app, powered by MudBlazor and the .NET 8 Template!</MudText>
-
-<MudAlert Severity="Severity.Normal">
-    You can find documentation and examples on our website here:
-    <MudLink Href="https://mudblazor.com" Target="_blank" Typo="Typo.body2" Color="Color.Primary">
-        <b>www.mudblazor.com</b>
-    </MudLink>
-</MudAlert>
+    [SupplyParameterFromQuery(Name = "y")]
+    public string? YouTube { get; set; }
+}
