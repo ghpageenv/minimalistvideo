@@ -28,7 +28,7 @@
         <MudStack Row="true">
             <MudSpacer />
             <MudCard>
-                <iframe id="VimeoVideoTopIframe" src="@($"https://player.vimeo.com/video/{Vimeo}?h=4207be9a8a&title=0&byline=0&portrait=0")" frameborder="0" allow="autoplay; fullscreen; picture-in-picture"></iframe>
+                <iframe src="@($"https://player.vimeo.com/video/{Vimeo}{(string.IsNullOrWhiteSpace(VimeoHash) ? string.Empty : $"?h={VimeoHash}")}")" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen="" data-ready="true"></iframe>
             </MudCard>
             <MudSpacer />
         </MudStack>
@@ -40,7 +40,13 @@
 
     [SupplyParameterFromQuery(Name = "y")]
     public string? YouTube { get; set; }
-  
+
     [SupplyParameterFromQuery(Name = "v")]
     public string? Vimeo { get; set; }
+
+    /// <summary>
+    ///     Required for private Vimeo videos. See https://www.drupal.org/project/video_embed_field/issues/3238136
+    /// </summary>
+    [SupplyParameterFromQuery(Name = "h")]
+    public string? VimeoHash { get; set; }
 }
