@@ -3,3 +3,4 @@ Supports
 * YouTube
 * Vimeo
 * TikTok
+* Wistia

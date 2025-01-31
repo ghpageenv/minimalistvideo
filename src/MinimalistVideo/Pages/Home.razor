@@ -1,4 +1,6 @@
 ﻿@page "/"
+@using OneOf
+@using OneOf.Types
 
 @if (ValidYouTube)
 {
@@ -7,12 +9,12 @@
         <MudStack Row="true">
             <MudSpacer />
             <MudCard>
-                <iframe src="@($"https://www.youtube.com/embed/{YouTube}")"
-                        width="560"
-                        height="315"
-                        title="YouTube video player"
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
+                <iframe src="@($"https://www.youtube.com/embed/{YouTube}{StartTime.Match(s => $"?start={s.TotalSeconds}", none => string.Empty)}")"
+                width="560"
+                height="315"
+                title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen>
                 </iframe>
             </MudCard>
             <MudSpacer />
@@ -20,7 +22,7 @@
         <MudSpacer />
     </MudStack>
 }
- 
+
 @if (ValidVimeo)
 {
     <div style="padding:56.25% 0 0 0;position:relative;">
@@ -54,8 +56,8 @@
             <MudSpacer />
             <MudCard>
                 <iframe src="//fast.wistia.net/embed/iframe/@Wistia?videoFoam=true" allowtransparency="true" frameborder="0"
-                        scrolling="no" class="wistia_embed" name="wistia_embed" allowfullscreen mozallowfullscreen
-                        webkitallowfullscreen oallowfullscreen msallowfullscreen width="1000" height="563"></iframe>
+                scrolling="no" class="wistia_embed" name="wistia_embed" allowfullscreen mozallowfullscreen
+                webkitallowfullscreen oallowfullscreen msallowfullscreen width="1000" height="563"></iframe>
                 <script src="//fast.wistia.net/assets/external/iframe-api-v1.js"></script>
                 <script charset="ISO-8859-1" src="//fast.wistia.com/assets/external/E-v1.js"></script>
             </MudCard>
@@ -81,7 +83,6 @@
 }
 
 @code {
-
     [SupplyParameterFromQuery(Name = "y")]
     public string? YouTube { get; set; }
 
@@ -102,6 +103,11 @@
 
     [SupplyParameterFromQuery(Name = "w")]
     public string? Wistia { get; set; }
+
+    [SupplyParameterFromQuery(Name = "s")]
+    private string? Start { get; set; }
+
+    private OneOf<TimeSpan, None> StartTime => int.TryParse(Start, out var parsedStart) ? TimeSpan.FromSeconds(parsedStart) : new None();
 
     private bool ValidYouTube => !string.IsNullOrWhiteSpace(YouTube);
     private bool ValidVimeo => !string.IsNullOrWhiteSpace(Vimeo);
